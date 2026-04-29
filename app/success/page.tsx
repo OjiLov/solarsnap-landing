@@ -1,0 +1,2 @@
+import Link from "next/link"; import { Header } from "@/components/landing/Header";
+export default function Success(){return <><Header/><main className="container-x grid min-h-[70vh] place-items-center"><div className="card max-w-lg p-10 text-center"><div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-solar-soft text-4xl text-solar-green">✓</div><h1 className="mt-6 text-3xl font-black">데모 신청이 완료되었습니다!</h1><p className="mt-4 text-gray-600">담당자가 빠른 시일 내 연락드리겠습니다.</p><Link href="/" className="btn-primary mt-8 inline-block">홈으로 돌아가기</Link></div></main></>}

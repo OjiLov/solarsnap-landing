@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-solar-green: #138A36;
+  --color-solar-deep: #0B5D2A;
+  --color-solar-soft: #EAF7EF;
+  --color-solar-yellow: #F6C343;
+  --shadow-soft: 0 18px 50px rgba(16, 24, 40, 0.08);
+}
+
+:root { --bg: #f8faf9; }
+body { background: var(--bg); color: #101828; }
+html { scroll-behavior: smooth; }
+
+.container-x { @apply mx-auto max-w-7xl px-5 sm:px-8; }
+.card { @apply rounded-3xl border border-gray-200 bg-white shadow-soft; }
+.btn-primary { @apply rounded-xl bg-solar-green px-5 py-3 font-semibold text-white hover:bg-solar-deep transition; }
+.btn-secondary { @apply rounded-xl border border-gray-300 bg-white px-5 py-3 font-semibold text-gray-800 hover:border-solar-green hover:text-solar-green transition; }
+.section-title { @apply text-3xl md:text-5xl font-black tracking-tight text-gray-950; }
+.section-sub { @apply mt-4 text-base md:text-lg text-gray-600 leading-8; }
