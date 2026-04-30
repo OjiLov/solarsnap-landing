@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node -v)",
+      "PowerShell(npm -v)",
+      "PowerShell(& \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" -v)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(cmd /c \"npm install -g @anthropic-ai/claude-code\")",
+      "PowerShell(cmd /c \"claude --version\")",
+      "PowerShell($bashPath = \"C:\\\\Program Files\\\\Git\\\\bin\\\\bash.exe\"; & $bashPath -c 'git status --porcelain')",
+      "PowerShell($json = Get-Content \"C:\\\\Users\\\\riberocap\\\\Desktop\\\\solarsnap\\\\solarsnap-landing\\\\.claude\\\\settings.json\" -Raw | ConvertFrom-Json; $json.hooks.PostToolUse[0].matcher; $json.hooks.PostToolUse[0].hooks[0].command)"
+    ]
+  }
+}

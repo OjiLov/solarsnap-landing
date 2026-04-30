@@ -1,292 +1,160 @@
 # SolarSnap Landing Page
 
-# 🚀 0. 전체 흐름 (먼저 이해)
+AI 기반 태양광 설치 시뮬레이션 SaaS의 랜딩 페이지 + 리드 수집 시스템
 
-```bash
-1. Node.js 설치
-2. ZIP 압축 해제
-3. 패키지 설치 (npm install)
-4. 환경변수 설정 (.env)
-5. DB 세팅 (Prisma)
-6. 개발 서버 실행 (npm run dev)
-7. 실제 동작 확인
-8. Vercel 배포
+**라이브 URL:** https://solarsnap-landing.vercel.app
+**GitHub:** https://github.com/OjiLov/solarsnap-landing
+
+---
+
+## 기술 스택
+
+| 항목 | 기술 |
+|------|------|
+| 프레임워크 | Next.js 15 (App Router) |
+| 언어 | TypeScript |
+| 스타일링 | Tailwind CSS v4 |
+| 폼 | React Hook Form + Zod |
+| 데이터베이스 | PostgreSQL + Prisma ORM |
+| 이메일 | Resend |
+| 애니메이션 | Framer Motion |
+| 배포 | Vercel |
+
+---
+
+## 프로젝트 구조
+
+```
+app/
+├── page.tsx                # 메인 랜딩페이지
+├── demo/page.tsx           # 데모 신청 페이지
+├── pricing/page.tsx        # 요금제 페이지
+├── contact/page.tsx        # 문의 페이지
+├── success/page.tsx        # 신청 완료 페이지
+└── api/lead/route.ts       # 리드 수집 API (POST)
+
+components/
+├── landing/
+│   ├── Header.tsx          # 스티키 네비게이션
+│   ├── HeroSection.tsx     # 히어로 (핵심 지표 4개)
+│   ├── Sections.tsx        # 문제/솔루션/비전/가치/기능/타겟 섹션
+│   ├── PricingSection.tsx  # 4단계 요금제 (Free/Basic/Pro/Enterprise)
+│   ├── FinalCTA.tsx        # 하단 CTA
+│   └── Footer.tsx          # 푸터
+├── forms/
+│   └── DemoRequestForm.tsx # 데모 신청 폼
+└── common/
+    └── Logo.tsx            # 브랜드 로고
+
+prisma/
+└── schema.prisma           # Lead 모델 (DB 스키마)
 ```
 
 ---
 
-# 🟢 1. 사전 준비 (필수)
+## 주요 기능
 
-## ✔️ 1-1 Node.js 설치
-
-👉 [https://nodejs.org](https://nodejs.org)
-
-* **권장 버전: 18 이상**
-* 설치 후 확인:
-
-```bash
-node -v
-npm -v
-```
+- **히어로 섹션** — 연간 발전량, 전기요금 절감, 투자회수기간, CO₂ 감축 지표 시각화
+- **솔루션 워크플로우** — AI 지붕 인식 → Before/After 시각화 → 경제성 분석 → PDF 리포트
+- **데모 신청 폼** — Zod 유효성 검사 + DB 저장 + 리드 상태 관리
+- **요금제 페이지** — 4단계 플랜 비교
+- **리드 관리** — `NEW → CONTACTED → QUALIFIED → CLOSED/LOST` 상태 추적
 
 ---
 
-## ✔️ 1-2 VS Code 설치 (추천)
+## 로컬 실행
 
-👉 [https://code.visualstudio.com](https://code.visualstudio.com)
-
-추천 확장:
-
-* ES7 React Snippets
-* Tailwind CSS IntelliSense
-* Prisma
-
----
-
-# 🟢 2. 프로젝트 압축 해제
-
-다운로드한 파일:
-
-```bash
-solarsnap-landing-nextjs.zip
-```
-
-👉 압축 해제
-
-```bash
-solarsnap-landing-nextjs/
-```
-
----
-
-# 🟢 3. 프로젝트 실행 준비
-
-## ✔️ 3-1 터미널 이동
-
-```bash
-cd solarsnap-landing-nextjs
-```
-
----
-
-## ✔️ 3-2 패키지 설치
+### 1. 의존성 설치
 
 ```bash
 npm install
 ```
 
-👉 설치되는 주요 패키지:
+### 2. 환경변수 설정
 
-* next
-* react
-* tailwind
-* prisma
-* zod
-* react-hook-form
-
----
-
-# 🟢 4. 환경변수 설정 (.env)
-
-## ✔️ 4-1 파일 생성
-
-프로젝트 루트에:
-
-```bash
-.env
-```
-
-## ✔️ 4-2 기본 값 입력
+`.env` 파일 생성:
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/solarsnap"
-
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-RESEND_API_KEY=your_api_key_here
+RESEND_API_KEY=your_resend_api_key
 ADMIN_EMAIL=your@email.com
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-👉 지금은 DB 없어도 실행 가능 (폼만 테스트 가능)
+> DB 없이도 UI 확인은 가능 (폼 제출 시 오류 발생)
 
----
-
-# 🟢 5. Prisma DB 설정 (선택 but 추천)
-
-## ✔️ 5-1 Prisma 초기화
+### 3. DB 마이그레이션
 
 ```bash
 npx prisma generate
-```
-
----
-
-## ✔️ 5-2 DB 생성
-
-### 방법 1 (추천: Supabase)
-
-👉 [https://supabase.com](https://supabase.com)
-
-1. 프로젝트 생성
-2. DB URL 복사
-3. `.env`에 넣기
-
----
-
-## ✔️ 5-3 테이블 생성
-
-```bash
 npx prisma db push
 ```
 
----
-
-# 🟢 6. 개발 서버 실행
+### 4. 개발 서버 실행
 
 ```bash
 npm run dev
 ```
 
-👉 브라우저 접속:
-
-```
-http://localhost:3000
-```
+브라우저에서 http://localhost:3000 접속
 
 ---
 
-# 🟢 7. 정상 동작 확인 체크리스트
+## 배포
 
-✔️ 랜딩페이지 화면 출력
-✔️ Hero 화면 정상
-✔️ CTA 버튼 클릭 이동
-✔️ 데모 신청 폼 입력 가능
-✔️ API 호출 정상 (/api/lead)
-
----
-
-# 🟢 8. 주요 코드 구조 이해 (중요)
-
-## 📁 핵심 폴더
+GitHub `master` 브랜치에 push하면 Vercel에서 자동 배포됩니다.
 
 ```bash
-app/
-  page.tsx            👉 메인 랜딩페이지
-  api/lead/route.ts   👉 데모 신청 API
+git push origin master
+```
 
-components/
-  landing/            👉 랜딩 섹션들
+### Vercel 환경변수 설정
 
-prisma/
-  schema.prisma       👉 DB 구조
+https://vercel.com/ojilovs-projects/solarsnap-landing → Settings → Environment Variables
+
+```
+DATABASE_URL
+RESEND_API_KEY
+ADMIN_EMAIL
+NEXT_PUBLIC_SITE_URL
 ```
 
 ---
 
-# 🟢 9. Vercel 배포 (실제 서비스)
+## DB 스키마 (Lead)
 
-## ✔️ 9-1 GitHub 업로드
+```prisma
+model Lead {
+  id        String     @id @default(cuid())
+  name      String
+  company   String
+  phone     String
+  email     String
+  type      LeadType
+  message   String?
+  consent   Boolean    @default(false)
+  source    String     @default("landing")
+  status    LeadStatus @default(NEW)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+```
+
+**LeadType:** `SALES_AGENT` | `EPC_COMPANY` | `FACTORY_OWNER` | `INVESTOR` | `PARTNER` | `OTHER`
+
+**LeadStatus:** `NEW` | `CONTACTED` | `QUALIFIED` | `CLOSED` | `LOST`
+
+---
+
+## 문제 해결
 
 ```bash
-git init
-git add .
-git commit -m "init"
-git remote add origin https://github.com/your-repo
-git push -u origin main
-```
+# 패키지 재설치
+rm -rf node_modules && npm install
 
----
+# Prisma 재생성
+npx prisma generate
 
-## ✔️ 9-2 Vercel 연결
-
-👉 [https://vercel.com](https://vercel.com)
-
-1. GitHub 연결
-2. 프로젝트 선택
-3. Deploy 클릭
-
----
-
-## ✔️ 9-3 환경변수 입력
-
-Vercel → Settings → Environment Variables
-
-```env
-DATABASE_URL=
-RESEND_API_KEY=
-ADMIN_EMAIL=
-NEXT_PUBLIC_APP_URL=
-```
-
----
-
-# 🟢 10. 이메일 기능 연결 (선택)
-
-👉 [https://resend.com](https://resend.com)
-
-1. 회원가입
-2. API Key 발급
-3. `.env`에 추가
-
----
-
-# 🟢 11. 실전 운영 체크리스트
-
-✔️ 도메인 연결 (ex. solarsnap.ai)
-✔️ Google Analytics 연결
-✔️ OG 이미지 설정
-✔️ SEO 메타데이터 적용
-✔️ 모바일 최적화 확인
-
----
-
-# 🔥 12. 문제 발생 시 해결
-
-## ❗ npm install 실패
-
-```bash
-rm -rf node_modules
-npm install
-```
-
----
-
-## ❗ 포트 충돌
-
-```bash
+# 다른 포트로 실행
 npm run dev -- -p 3001
 ```
-
----
-
-## ❗ Prisma 오류
-
-```bash
-npx prisma generate
-npx prisma db push
-```
-
----
-
-# 🔥 핵심 요약
-
-👉 실행만 하고 싶다면:
-
-```bash
-npm install
-npm run dev
-```
-
-👉 DB까지 붙이면:
-
-```bash
-npx prisma db push
-```
-
-👉 배포까지:
-
-```bash
-git push → Vercel Deploy
-```
-
----
